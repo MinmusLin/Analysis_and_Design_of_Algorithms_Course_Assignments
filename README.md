@@ -15,16 +15,16 @@ A collection of my analysis and design of algorithms course assignments.
 
 ## 仓库组成
 
-* [Assignment_1](Assignment_1.md)
+* [Assignment 1](Assignment_1.md)
 课程作业 1
 
-* [Assignment_2](Assignment_2.md)
+* [Assignment 2](Assignment_2.md)
 课程作业 2
 
-* [Assignment_3](Assignment_3.md)
+* [Assignment 3](Assignment_3.md)
 课程作业 3
 
-* [Assignment_4](Assignment_4.md)
+* [Assignment 4](Assignment_4.md)
 课程作业 4
 
 * [Review Notes](Review_Notes.md)
