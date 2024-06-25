@@ -890,6 +890,221 @@ def horner_method(coefficients, x):
 
 ## Lecture 08 回溯法和分支界限法
 
+**穷举搜索**：
+
+* 以系统的方式生成问题的所有潜在解决方案列表
+* 选择满足所有约束条件的解决方案
+* 逐一评估潜在的解决方案，排除不可行的方案，并且在优化问题中，记录到目前为止找到的最佳解决方案
+* 当搜索结束时，宣布找到的所需解决方案
+* 通常需要生成特定的组合对象
+
+**DFS（深度优先遍历）**：
+
+```
+DFS(G) // 使用深度优先搜索访问图 G=(V, E)，可能包含多个连通分量
+count ← 0 // 访问序列
+// 标记每个顶点为 0（未访问）
+for each vertex v ∈ V do
+    if v is marked with 0 // v 尚未被访问
+        dfs(v)
+
+dfs(v) // 使用深度优先搜索访问从顶点 v 开始的连通分量
+// 访问顶点 v
+count ← count + 1
+mark v with count
+for each vertex w adjacent to v do
+    if w is marked with 0 // w 尚未被访问
+        dfs(w)
+```
+
+应用：
+
+* 检查图的连通性
+* 检查图的无环性
+* 寻找有向图的强连通分量
+* 寻找无向图的割点
+* 对有向图进行拓扑排序
+* 边的分类
+* 验证无向图是否连通
+
+**BFS（广度优先遍历）**：
+
+```
+BFS(G)
+count ← 0
+// 标记每个顶点为 0（未访问）
+for each vertex v ∈ V do
+    if v is marked with 0  // 如果 v 还未被访问
+        bfs(v)
+
+bfs(v)
+    count ← count + 1
+    mark v with count // 访问 v
+    initialize queue with v // 将 v 入队
+    while queue is not empty do
+        a ← front of queue // 出队
+        for each vertex w adjacent to a do
+            if w is marked with 0 // 如果 w 还未被访问
+                count ← count + 1
+                mark w with count // 访问 w
+                add w to the end of the queue // 将 w 入队
+        remove a from the front of the queue // 从队列前端移除 a
+```
+
+应用：
+
+* 检查图的连通性
+* 检查图的无环性
+* 寻找两个给定顶点之间边数最少的路径
+
+**回溯法**：
+
+* 系统性：它在包含问题的所有解的解空间树中，按照深度优先的策略，结从根结点出发搜索解空间树。
+* 跳跃性：算法搜索至解空间树的任一结时点时，判断该结点为根的子树是否包含问题的解，如果肯定不包含，则跳过以该结点为根的子树的搜索，逐层向其祖先结点回溯。否则，进入该子树，继续深度优先的策略进行搜索。
+
+基本步骤：
+
+* 针对所给问题，定义问题的解空间
+* 确定易于搜索的解空间结构
+* 以深度优先方式搜索解空间，并在搜索过程中用剪枝函数避免无效搜索
+
+常用剪枝函数：
+
+* 用约束函数在扩展结点处减去不满足约束的子树
+* 用限界函数减去得不到最优解的子树
+
+两类常见的解空间树：
+
+![](assets/2024-06-25_21-42-03.png)
+
+用回溯法解题的一个显著特征是在搜索过程中动态产生问题的解空间。在任何时刻，算法只保存从根结点到当前扩展结点的路径。如果解空间树中从根结点到叶结点的最长路径的长度为 $h(n)$ ，则回溯法所需的计算空间通常为 $O(h(n))$ 。而显式地存储整个解空间则需要 $O(2^{h(n)})$ 或 $O(h(n)!)$ 内存空间。
+
+**子集树回溯算法**：
+
+```
+Backtrack(int t) // 搜索到树的第 t 层
+{
+    // 由第 t 层向第 t + 1 层扩展，确定 x[t] 的值
+    if (t > n) then
+        output(x) // 叶子结点是可行解
+    else
+        for each Xt in all possible values of x[t] do // 遍历 x[t] 的所有可能取值集合
+            x[t] = Xt // 将 x[t] 设为 Xt 中的一个值
+            // 检查约束和限制条件
+            if (Constraint(t) and Bound(t)) then
+                Backtrack(t + 1) // 如果满足约束和限制条件，则进入下一层
+}
+```
+
+**排列树回溯算法**：
+
+```
+Backtrack(int t) // 搜索到树的第t层
+{
+    // 由第 t 层向第 t + 1 层扩展，确定 x[t] 的值
+    if (t > n) then
+        output(x) // 叶子结点是可行解
+    else
+        for i = t to n do
+            swap(x[t], x[i]) // 交换当前元素与后续元素
+            // 检查约束和边界条件
+            if (Constraint(t) and Bound(t))
+                Backtrack(t + 1) // 如果满足条件，继续探索下一层
+            swap(x[t], x[i]) // 还原交换，回溯到上一步
+}
+```
+
+**N 皇后问题**：
+
+```python
+def solve_n_queens(n):
+    def is_valid(board, row, col):
+        for i in range(row):
+            if board[i] == col or abs(board[i] - col) == row - i:
+                return False
+        return True
+
+    def dfs(board, row):
+        if row == n:
+            results.append(board.copy())
+            return
+        for col in range(n):
+            if is_valid(board, row, col):
+                board[row] = col
+                dfs(board, row + 1)
+                board[row] = -1
+
+    results = []
+    board = [-1] * n
+    dfs(board, 0)
+    return results
+```
+
+**0-1 背包问题**：
+
+```python
+def knapsack(weights, values, capacity):
+    n = len(weights)
+    max_value = [0]  # 用来存储最大价值，使用列表是为了在内部函数中修改
+
+    def dfs(index, current_weight, current_value):
+        if current_weight > capacity or index == n:
+            return
+
+        # 不选当前物品
+        dfs(index + 1, current_weight, current_value)
+
+        # 选当前物品
+        if current_weight + weights[index] <= capacity:
+            new_value = current_value + values[index]
+            max_value[0] = max(max_value[0], new_value)
+            dfs(index + 1, current_weight + weights[index], new_value)
+
+    dfs(0, 0, 0)
+    return max_value[0]
+```
+
+**旅行商问题（TSP）**：
+
+```python
+def TSP(a):
+    n = len(a)
+    x = list(range(n)) # 路径初始化为 0, 1, 2, ..., n-1
+    best_x = [] # 存储最佳路径
+    best_v = float('inf') # 最佳路径的距离，初始化为无穷大
+
+    def swap(lst, i, j):
+        lst[i], lst[j] = lst[j], lst[i]
+
+    def TSPBacktrack(i, cc):
+        nonlocal best_v, best_x
+        if i == n: # 到达叶结点
+            cost = cc + a[x[n-1]][x[0]] # 回到起点的成本
+            if cost < best_v:
+                best_v = cost
+                best_x[:] = x[:]
+        else:
+            for j in range(i, n):
+                if cc + a[x[i-1]][x[j]] < best_v: # 限界剪枝
+                    swap(x, i, j)
+                    TSPBacktrack(i + 1, cc + a[x[i-1]][x[i]])
+                    swap(x, i, j)
+
+    TSPBacktrack(1, 0)
+    return best_v, best_x
+```
+
+在其他条件相当的前提下，让可取值最少的 $x[i]$ 优先。
+
+![](assets/2024-06-25_22-19-37.png)
+
+图 (a) 中，从第 1 层剪去 1 棵子树，则从所有应当考虑的 3 元组中一次消去 12 个 3 元组。对于图 (b)，虽然同样从第 1 层剪去 1 棵子树，却只从应当考虑的 3 元组中消去 8 个 3 元组。前者的效果明显比后者好。
+
+**回溯法与穷举法的区别**：
+
+* 穷举法：解全部生成后再检查是否满足条件，无回退
+* 回溯法：解逐步生成，有退回
+
 ## Lecture 09 贪心法
 
 ## Lecture 10 动态规划法
