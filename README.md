@@ -28,7 +28,7 @@ A collection of my analysis and design of algorithms course assignments, and cou
 课程作业 4
 
 * [Course Notes](Course_Notes.md)
-复习笔记
+课程笔记
 
 ## 相关仓库
 
