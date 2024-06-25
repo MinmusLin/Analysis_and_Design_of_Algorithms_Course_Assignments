@@ -6,9 +6,9 @@ Analysis_and_Design_of_Algorithms_Course_Assignments
 
 ## 仓库简介
 
-A collection of my analysis and design of algorithms course assignments.
+A collection of my analysis and design of algorithms course assignments, and course notes.
 
-2024年同济大学算法设计与分析课程作业合集。
+2024年同济大学算法设计与分析课程作业合集，以及课程笔记。
 
 > ***Relevant course***
 > * Analysis and Design of Algorithms 2024 (2024年同济大学算法设计与分析)
@@ -27,7 +27,7 @@ A collection of my analysis and design of algorithms course assignments.
 * [Assignment 4](Assignment_4.md)
 课程作业 4
 
-* [Review Notes](Review_Notes.md)
+* [Course Notes](Course_Notes.md)
 复习笔记
 
 ## 相关仓库
